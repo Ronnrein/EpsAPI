@@ -1,0 +1,12 @@
+{
+  "host": "localhost",
+  "port": 8080,
+  "accesslog": "access_log",
+  "errorlog": "error_log",
+  "dbname": "dbname",
+  "dbuser": "dbuser",
+  "dbpassword": "dbpassword",
+  "dbhost": "dbhost",
+  "dbprotocol": "tcp",
+  "dbport": 3306
+}

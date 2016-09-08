@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sørlanet Kru API</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
+	crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        var cache = [];
+        var i = 0;
+        $(".route").each(function(){
+          var path = $(this).children().eq(0).text();
+          var method = $(this).children().eq(1).text();
+          if(path in cache){
+            $("#"+cache[path]).children().eq(1).append(", "+method);
+            $(this).remove();
+            return;
+          }
+          $(this).attr("id", i);
+          cache[path] = i;
+          i++;
+        });
+      });
+    </script>
+</head>
+<body>
+	<br>
+	<div class="container">
+    <table class="table table-striped">
+        <tr>
+            <th>Path</th>
+            <th>Method</th>
+        </tr>
+        {{range .Routes}}
+        <tr class="route">
+            <td>{{if eq .Method "GET"}}<a href="{{.Pattern}}">{{.Pattern}}</a>{{else}}{{.Pattern}}{{end}}</td>
+            <td>{{.Method}}</td>
+        </tr>
+        {{end}}
+    </table>
+	</div>
+</body>
+</html>
