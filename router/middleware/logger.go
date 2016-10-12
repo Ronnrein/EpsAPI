@@ -71,20 +71,22 @@ func Logger(inner http.Handler) http.Handler {
 		}
 		formattedTime := logEntry.Date.Format("02/Jan/2006 03:04:05 -0300")
 		logStr := fmt.Sprintf(accessFormat, logEntry.Client, formattedTime, logEntry.Method, logEntry.Path, r.Proto, logEntry.StatusCode, unsafe.Sizeof(logEntry.Response))
-		fmt.Fprintln(accessFile, logStr)
 		fmt.Println(logStr)
-		if Result.Error != nil {
-			formattedTime = logEntry.Date.Format("Mon Jan _2 15:04:05 2006")
-			logStr = fmt.Sprintf(errorFormat, formattedTime, logEntry.Client, logEntry.Error, logEntry.Path)
-			fmt.Fprintln(errorFile, logStr)
-			fmt.Println(logStr)
-		}
-		if split[len(split)-1] == "log" {
-			return
-		}
-		query := database.DB.Create(&logEntry)
-		if query.Error != nil {
-			fmt.Printf("Error logging to DB: %s", query.Error)
+		if utils.Config.Log {
+			fmt.Fprintln(accessFile, logStr)
+			if Result.Error != nil {
+				formattedTime = logEntry.Date.Format("Mon Jan _2 15:04:05 2006")
+				logStr = fmt.Sprintf(errorFormat, formattedTime, logEntry.Client, logEntry.Error, logEntry.Path)
+				fmt.Fprintln(errorFile, logStr)
+				fmt.Println(logStr)
+			}
+			if split[len(split)-1] == "log" {
+				return
+			}
+			query := database.DB.Create(&logEntry)
+			if query.Error != nil {
+				fmt.Printf("Error logging to DB: %s", query.Error)
+			}
 		}
 	})
 }

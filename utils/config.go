@@ -17,6 +17,7 @@ type Conf struct {
 	DBHost     string `json:"dbhost"`
 	DBProtocol string `json:"dbprotocol"`
 	DBPort     int    `json:"dbport"`
+	Log				 bool		`json:"log"`
 }
 
 var Config Conf
