@@ -20,7 +20,6 @@ type Session struct {
 	gorm.Model
 	Latitude 			string `gorm:"type:double"`
 	Longitude 		string `gorm:"type:double"`
-	UserID				uint
 	DepartmentID	uint
 }
 

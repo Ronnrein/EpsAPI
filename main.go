@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	database.DB.AutoMigrate(&models.User{}, &models.Department{}, &models.MapPin{}, &models.Message{}, &models.Operator{}, &models.Session{}, &models.SessionOperator{}, &middleware.LogEntry{})
+	database.DB.AutoMigrate(&models.Department{}, &models.MapPin{}, &models.Message{}, &models.Operator{}, &models.Session{}, &models.SessionOperator{}, &middleware.LogEntry{})
 }
 
 func main() {

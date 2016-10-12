@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"net/http"
 	"html/template"
+	"strings"
 
 	"github.com/ronnrein/eps/router/middleware"
 	"github.com/ronnrein/eps/utils"
@@ -40,6 +41,18 @@ var Routes = []Route{
 		"/log/{id}",
 		Log,
 	},
+	Route{
+		"Test",
+		"GET",
+		"/test/{str}",
+		Test,
+	},
+}
+
+func Test(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
+	str := mux.Vars(r)["str"]
+	str = strings.Replace(str, "002F", "/", -1)
+	return middleware.HandlerResult{http.StatusOK, str, nil}
 }
 
 func Index(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
