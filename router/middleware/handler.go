@@ -14,6 +14,10 @@ type HandlerResult struct {
 	Error      *error
 }
 
+type TextResponse struct {
+	Result	string
+}
+
 type ResultHandler func(http.ResponseWriter, *http.Request) HandlerResult
 
 func (inner ResultHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {

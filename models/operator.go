@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 	"net/http"
@@ -9,7 +8,6 @@ import (
 
 	"github.com/ronnrein/eps/database"
 	"github.com/ronnrein/eps/router"
-	"github.com/ronnrein/eps/utils"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -108,8 +106,7 @@ func AddOperator(w http.ResponseWriter, r *http.Request) middleware.HandlerResul
 	if query.Error != nil {
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error creating operator", &query.Error}
 	}
-	url := fmt.Sprintf("http://%s:%d/operators/%d", utils.Config.Host, utils.Config.Port, operator.ID)
-	return middleware.HandlerResult{http.StatusOK, url, nil}
+	return middleware.HandlerResult{http.StatusOK, operator, nil}
 }
 
 func DeleteOperator(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {

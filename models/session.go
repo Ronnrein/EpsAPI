@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 	"net/http"
@@ -9,7 +8,6 @@ import (
 
 	"github.com/ronnrein/eps/database"
 	"github.com/ronnrein/eps/router"
-	"github.com/ronnrein/eps/utils"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -18,8 +16,8 @@ import (
 
 type Session struct {
 	gorm.Model
-	Latitude 			string `gorm:"type:double"`
-	Longitude 		string `gorm:"type:double"`
+	Latitude 			float32 `gorm:"type:double"`
+	Longitude 		float32 `gorm:"type:double"`
 	DepartmentID	uint
 }
 
@@ -113,8 +111,7 @@ func AddSession(w http.ResponseWriter, r *http.Request) middleware.HandlerResult
 	if query.Error != nil {
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error creating session", &query.Error}
 	}
-	url := fmt.Sprintf("http://%s:%d/sessions/%d", utils.Config.Host, utils.Config.Port, session.ID)
-	return middleware.HandlerResult{http.StatusOK, url, nil}
+	return middleware.HandlerResult{http.StatusOK, session, nil}
 }
 
 func DeleteSession(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {

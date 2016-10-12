@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 	"net/http"
@@ -9,7 +8,6 @@ import (
 
 	"github.com/ronnrein/eps/database"
 	"github.com/ronnrein/eps/router"
-	"github.com/ronnrein/eps/utils"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -95,8 +93,7 @@ func AddMessage(w http.ResponseWriter, r *http.Request) middleware.HandlerResult
 	if query.Error != nil {
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error creating message", &query.Error}
 	}
-	url := fmt.Sprintf("http://%s:%d/messages/%d", utils.Config.Host, utils.Config.Port, message.ID)
-	return middleware.HandlerResult{http.StatusOK, url, nil}
+	return middleware.HandlerResult{http.StatusOK, message, nil}
 }
 
 func DeleteMessage(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {

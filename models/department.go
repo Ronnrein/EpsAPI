@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 	"net/http"
@@ -9,7 +8,6 @@ import (
 
 	"github.com/ronnrein/eps/database"
 	"github.com/ronnrein/eps/router"
-	"github.com/ronnrein/eps/utils"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -19,8 +17,6 @@ import (
 type Department struct {
 	gorm.Model
 	Name			string
-	Sessions 	Sessions
-	Operators	Operators
 }
 
 type Departments []Department
@@ -107,8 +103,8 @@ func AddDepartment(w http.ResponseWriter, r *http.Request) middleware.HandlerRes
 	if query.Error != nil {
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error creating department", &query.Error}
 	}
-	url := fmt.Sprintf("http://%s:%d/departments/%d", utils.Config.Host, utils.Config.Port, department.ID)
-	return middleware.HandlerResult{http.StatusOK, url, nil}
+	//url := fmt.Sprintf("http://%s:%d/departments/%d", utils.Config.Host, utils.Config.Port, department.ID)
+	return middleware.HandlerResult{http.StatusOK, department, nil}
 }
 
 func DeleteDepartment(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {

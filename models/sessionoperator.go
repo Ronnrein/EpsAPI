@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 	"net/http"
@@ -9,7 +8,6 @@ import (
 
 	"github.com/ronnrein/eps/database"
 	"github.com/ronnrein/eps/router"
-	"github.com/ronnrein/eps/utils"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -58,8 +56,7 @@ func AddSessionOperator(w http.ResponseWriter, r *http.Request) middleware.Handl
 	if query.Error != nil {
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error creating session operator", &query.Error}
 	}
-	url := fmt.Sprintf("http://%s:%d/sessionoperators/%d", utils.Config.Host, utils.Config.Port, sessionoperator.ID)
-	return middleware.HandlerResult{http.StatusOK, url, nil}
+	return middleware.HandlerResult{http.StatusOK, sessionoperator, nil}
 }
 
 func DeleteSessionOperator(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
