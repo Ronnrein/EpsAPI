@@ -34,6 +34,12 @@ func init() {
 			GetOperators,
 		},
 		router.Route{
+			"LogInOperator",
+			"POST",
+			"/operators/login",
+			LogInOperator,
+		},
+		router.Route{
 			"GetOperator",
 			"GET",
 			"/operators/{id}",
@@ -174,4 +180,18 @@ func GetOperatorSessions(w http.ResponseWriter, r *http.Request) middleware.Hand
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error getting sessions", &query.Error}
 	}
 	return middleware.HandlerResult{http.StatusOK, sessions, nil}
+}
+
+func LogInOperator(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
+	decoder := json.NewDecoder(r.Body)
+	operator := Operator{}
+	if err := decoder.Decode(&operator); err != nil {
+		return middleware.HandlerResult{http.StatusBadRequest, "Error decoding operator", &err}
+	}
+	var query *gorm.DB
+	query = database.DB.Where(&operator).Find(&operator)
+	if query.Error != nil {
+		return middleware.HandlerResult{http.StatusNotFound, "Operator not found", &query.Error}
+	}
+	return middleware.HandlerResult{http.StatusOK, operator, nil}
 }
