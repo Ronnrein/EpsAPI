@@ -33,6 +33,12 @@ func init() {
 			GetSessions,
 		},
 		router.Route{
+			"GetSessionsSearch",
+			"GET",
+			"/sessions/search/{search}",
+			GetSessionsSearch,
+		},
+		router.Route{
 			"GetSession",
 			"GET",
 			"/sessions/{id}",
@@ -186,7 +192,7 @@ func GetSessionOperators(w http.ResponseWriter, r *http.Request) middleware.Hand
 	operators := Operators{}
 	var query *gorm.DB
 	if id, err := strconv.Atoi(idStr); err == nil {
-		query = database.DB.Joins("JOIN session_operators ON session_operators.operator_id = operators.id").Where("session_operators.session_id = ?", id).Find(&operators);
+		query = database.DB.Joins("JOIN session_operators ON session_operators.operator_id = operators.id").Where("session_operators.session_id = ?", id).Find(&operators)
 	} else {
 		return middleware.HandlerResult{http.StatusBadRequest, "Bad ID supplied", &err}
 	}
@@ -194,4 +200,14 @@ func GetSessionOperators(w http.ResponseWriter, r *http.Request) middleware.Hand
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error getting operators", &query.Error}
 	}
 	return middleware.HandlerResult{http.StatusOK, operators, nil}
+}
+
+func GetSessionsSearch(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
+	search := mux.Vars(r)["search"]
+	sessions := Sessions{}
+	query := database.DB.Joins("JOIN messages ON sessions.id = messages.session_id").Where("messages.message LIKE ?", "%"+search+"%").Or("sessions.id LIKE ?", "%"+search+"%").Group("sessions.id").Find(&sessions)
+	if query.Error != nil {
+		return middleware.HandlerResult{http.StatusInternalServerError, "Error getting sessions", &query.Error}
+	}
+	return middleware.HandlerResult{http.StatusOK, sessions, nil}
 }
