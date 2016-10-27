@@ -16,8 +16,8 @@ import (
 
 type Session struct {
 	gorm.Model
-	Latitude 			float32 `gorm:"type:double"`
-	Longitude 		float32 `gorm:"type:double"`
+	Latitude 			string `gorm:"type:double"`
+	Longitude 		string `gorm:"type:double"`
 	DepartmentID	uint
 }
 
