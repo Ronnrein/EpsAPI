@@ -3,15 +3,13 @@ package middleware
 import (
 	"fmt"
 	"os"
-	"strings"
 	"time"
 	"unsafe"
+	"bytes"
 	"io/ioutil"
 	"net/http"
 
-	"github.com/ronnrein/eps/database"
 	"github.com/ronnrein/eps/utils"
-	"bytes"
 )
 
 var accessFormat = "%s - - [%s] \"%s %s %s\" %d %d"
@@ -28,7 +26,6 @@ type LogEntry struct {
 	Duration   time.Duration
 	Client     string
 	Query      string
-	Response   string
 	Error      string
 }
 
@@ -52,7 +49,6 @@ func Logger(inner http.Handler) http.Handler {
 		start := time.Now()
 		inner.ServeHTTP(w, r)
 		duration := time.Since(start)
-		split := strings.Split(r.RequestURI, "/")
 		var errStr string
 		if Result.Error != nil {
 			errObj := *Result.Error
@@ -66,26 +62,20 @@ func Logger(inner http.Handler) http.Handler {
 			Duration:   duration,
 			Client:     r.RemoteAddr,
 			Query:      string(body),
-			Response:   Result.Result.(string),
 			Error:      errStr,
 		}
-		formattedTime := logEntry.Date.Format("02/Jan/2006 03:04:05 -0300")
-		logStr := fmt.Sprintf(accessFormat, logEntry.Client, formattedTime, logEntry.Method, logEntry.Path, r.Proto, logEntry.StatusCode, unsafe.Sizeof(logEntry.Response))
+		formattedTimeLog := logEntry.Date.Format("02/Jan/2006 03:04:05 -0300")
+		logStr := fmt.Sprintf(accessFormat, logEntry.Client, formattedTimeLog, logEntry.Method, logEntry.Path, r.Proto, logEntry.StatusCode, unsafe.Sizeof(Result.Result))
 		fmt.Println(logStr)
-		if utils.Config.Log {
+		if utils.Config.LogAccess {
 			fmt.Fprintln(accessFile, logStr)
-			if Result.Error != nil {
-				formattedTime = logEntry.Date.Format("Mon Jan _2 15:04:05 2006")
-				logStr = fmt.Sprintf(errorFormat, formattedTime, logEntry.Client, logEntry.Error, logEntry.Path)
-				fmt.Fprintln(errorFile, logStr)
-				fmt.Println(logStr)
-			}
-			if split[len(split)-1] == "log" {
-				return
-			}
-			query := database.DB.Create(&logEntry)
-			if query.Error != nil {
-				fmt.Printf("Error logging to DB: %s", query.Error)
+		}
+		if Result.Error != nil {
+			formattedTimeError := logEntry.Date.Format("Mon Jan _2 15:04:05 2006")
+			errorStr := fmt.Sprintf(errorFormat, formattedTimeError, logEntry.Client, logEntry.Error, logEntry.Path)
+			fmt.Println(errorStr)
+			if utils.Config.LogError {
+				fmt.Fprintln(errorFile, errorStr)
 			}
 		}
 	})
