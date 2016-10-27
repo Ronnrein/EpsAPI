@@ -8,5 +8,7 @@
   "dbpassword": "dbpassword",
   "dbhost": "dbhost",
   "dbprotocol": "tcp",
-  "dbport": 3306
+  "dbport": 3306,
+  "logaccess": false,
+  "logerror": false
 }
