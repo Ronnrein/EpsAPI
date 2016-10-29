@@ -2,6 +2,7 @@ package router
 
 import (
 	"bytes"
+	"time"
 	"net/http"
 	"html/template"
 
@@ -25,6 +26,12 @@ var Routes = []Route{
 		"/",     // Pattern
 		Index,   // Handler
 	},
+	Route{
+		"Time",
+		"GET",
+		"/time",
+		Time,
+	},
 }
 
 func Index(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
@@ -42,4 +49,8 @@ func Index(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error generating index site from template", &err}
 	}
 	return middleware.HandlerResult{http.StatusOK, doc.String(), nil}
+}
+
+func Time(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
+	return middleware.HandlerResult{http.StatusOK, time.Now().Format("2006-01-02T15:04:05Z"), nil}
 }
