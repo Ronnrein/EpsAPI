@@ -85,7 +85,7 @@ func init() {
 
 func GetSessions(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
 	sessions := Sessions{}
-	query := database.DB.Find(&sessions)
+	query := database.DB.Order("updated_at desc").Find(&sessions)
 	if query.Error != nil {
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error getting sessions", &query.Error}
 	}
