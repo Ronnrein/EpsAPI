@@ -52,5 +52,10 @@ func Index(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
 }
 
 func Time(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
-	return middleware.HandlerResult{http.StatusOK, time.Now().Format("2006-01-02T15:04:05Z"), nil}
+	data := struct {
+		Time string
+	}{
+		time.Now().Format("2006-01-02T15:04:05Z"),
+	}
+	return middleware.HandlerResult{http.StatusOK, data, nil}
 }
