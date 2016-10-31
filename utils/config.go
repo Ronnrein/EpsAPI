@@ -9,6 +9,9 @@ import (
 type Conf struct {
 	Host       string `json:"host"`
 	Port       int    `json:"port"`
+	SSLPort    int    `json:"sslport"`
+	SSLCert		 string `json:"sslcert"`
+	SSLKey		 string `json:"sslkey"`
 	AccessLog  string `json:"accesslog`
 	ErrorLog   string `json:"errorlog`
 	DBName     string `json:"dbname"`

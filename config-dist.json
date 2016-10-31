@@ -1,6 +1,9 @@
 {
   "host": "localhost",
   "port": 8080,
+  "sslport": 4433,
+  "sslcert": "eps.ronnrein.com.cert",
+  "sslkey": "eps.ronnrein.com.key",
   "accesslog": "access_log",
   "errorlog": "error_log",
   "dbname": "dbname",

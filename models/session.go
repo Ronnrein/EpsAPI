@@ -150,11 +150,11 @@ func UpdateSession(w http.ResponseWriter, r *http.Request) middleware.HandlerRes
 		return middleware.HandlerResult{http.StatusBadRequest, "Error decoding session", &err}
 	}
 	newSession.UpdatedAt = time.Now()
-	query = database.DB.Model(session).Updates(&newSession)
+	query = database.DB.Model(&session).Updates(&newSession)
 	if query.Error != nil {
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error updating session", &query.Error}
 	}
-	return middleware.HandlerResult{http.StatusOK, "Session updated", nil}
+	return middleware.HandlerResult{http.StatusOK, session, nil}
 }
 
 func GetSessionMapPins(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
