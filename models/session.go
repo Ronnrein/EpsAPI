@@ -205,7 +205,7 @@ func GetSessionOperators(w http.ResponseWriter, r *http.Request) middleware.Hand
 func GetSessionsSearch(w http.ResponseWriter, r *http.Request) middleware.HandlerResult {
 	search := mux.Vars(r)["search"]
 	sessions := Sessions{}
-	query := database.DB.Joins("JOIN messages ON sessions.id = messages.session_id").Where("messages.message LIKE ?", "%"+search+"%").Or("sessions.id LIKE ?", "%"+search+"%").Group("sessions.id").Find(&sessions)
+	query := database.DB.Joins("JOIN messages ON sessions.id = messages.session_id").Where("messages.message LIKE ?", "%"+search+"%").Or("sessions.id LIKE ?", "%"+search+"%").Group("sessions.id").Order("updated_at desc").Find(&sessions)
 	if query.Error != nil {
 		return middleware.HandlerResult{http.StatusInternalServerError, "Error getting sessions", &query.Error}
 	}

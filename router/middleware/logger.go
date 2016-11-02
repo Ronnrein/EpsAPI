@@ -64,14 +64,14 @@ func Logger(inner http.Handler) http.Handler {
 			Query:      string(body),
 			Error:      errStr,
 		}
-		formattedTimeLog := logEntry.Date.Format("02/Jan/2006 03:04:05 -0300")
+		formattedTimeLog := logEntry.Date.Format("02/Jan/2006 15:04:05 +0100")
 		logStr := fmt.Sprintf(accessFormat, logEntry.Client, formattedTimeLog, logEntry.Method, logEntry.Path, r.Proto, logEntry.StatusCode, unsafe.Sizeof(Result.Result))
 		fmt.Println(logStr)
 		if utils.Config.LogAccess {
 			fmt.Fprintln(accessFile, logStr)
 		}
 		if Result.Error != nil {
-			formattedTimeError := logEntry.Date.Format("Mon Jan _2 15:04:05 2006")
+			formattedTimeError := logEntry.Date.Format("Mon Jan 02 15:04:05 2006")
 			errorStr := fmt.Sprintf(errorFormat, formattedTimeError, logEntry.Client, logEntry.Error, logEntry.Path)
 			fmt.Println(errorStr)
 			if utils.Config.LogError {
