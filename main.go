@@ -19,5 +19,5 @@ func init() {
 func main() {
 	router.RemoveHandlers()
 	router := router.NewRouter()
-	log.Fatal(http.ListenAndServeTLS(fmt.Sprint(":", utils.Config.SSLPort), utils.Config.SSLCert, utils.Config.SSLKey, router))
+	log.Fatal(http.ListenAndServeTLS(fmt.Sprint(":", utils.Config.Port), utils.Config.SSLCert, utils.Config.SSLKey, router))
 }

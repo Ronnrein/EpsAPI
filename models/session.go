@@ -18,6 +18,7 @@ type Session struct {
 	gorm.Model
 	Latitude 			string `gorm:"type:double"`
 	Longitude 		string `gorm:"type:double"`
+	Read					int		 `sql:"DEFAULT:0"`
 	DepartmentID	uint
 }
 
